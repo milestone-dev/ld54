@@ -3,15 +3,25 @@ var playerCanvas;
 var currentScreen;
 var socketConnection;
 var isTouching = false;
-var audio = {
-	tick:new Audio("audio/tick.mp3")
+var audioPlayers = {
+	tick:new Audio("audio/tick.mp3"),
+	discovery:new Audio("audio/discovery.mp3"),
 };
-var audioLastPlayed = {
-	tick:new Date().valueOf()
-}
+var audioLastPlayed = {}
 var suitcaseLockScrollIndex = {}
+var tickAudioPlayerIndex = 0;
+var tickAudioPlayers = [];
+var audioPlayersWarmed = false;
 
 const init = function() {
+	for (let i = 0; i < 15; i++) {
+		let a = new Audio("audio/tick.mp3");
+		a.volume = 0;
+		tickAudioPlayers[i] = a;
+	}
+	Object.values(audioPlayers).forEach((player) => player.volume = 0);
+	Object.keys(audioPlayers).forEach((key) => audioLastPlayed[key] = new Date().valueOf());
+
 	document.addEventListener("touchstart", touchStart);
 	document.addEventListener("touchend", touchEnd);
 	document.addEventListener("mouseup", touchEnd);
@@ -92,26 +102,57 @@ const hideAll = function(selector) {
 		elm.classList.remove("active");
 	});
 }
+const tryPlayTickAudio = function() {
+	if (tickAudioPlayerIndex < tickAudioPlayers.length - 1) tickAudioPlayerIndex++;
+	else tickAudioPlayerIndex = 0;
+	console.log(tickAudioPlayerIndex);
+	tickAudioPlayers[tickAudioPlayerIndex].play();
+}
+
 const tryPlayAudio = function(key, timeout) {
+	if (timeout == null) timeout = 500;
 	if (new Date().valueOf() - audioLastPlayed[key] > timeout) {
 		audioLastPlayed[key] = new Date().valueOf();
-
-		audio[key].cloneNode().play();
+		audioPlayers[key].volume = 1;
+		audioPlayers[key].play();
 	}
+}
+
+const warmUpAudioPlayers = function() {
+	tickAudioPlayers.forEach(player => {
+		player.volume = 0;
+		player.play();
+		window.setTimeout(e => player.volume = 1, 1000);
+	});
+
+	Object.values(audioPlayers).forEach(player => {
+		player.volume = 0;
+		player.play();
+	});
+
 }
 
 const switchScreen = function(id) {
 	hideAll(".screen");
 	currentScreen = elm(`#${id}`);
 	show(currentScreen);
+
+	switch(currentScreen.id) {
+		case "suitcase-inside":
+			tryPlayAudio("discovery")
+		break;
+	}
 }
 
 // Events
 
 const touchClick = function(evt) {
+	if (!audioPlayersWarmed) warmUpAudioPlayers();
+
 	let screenID = evt.target.dataset.screenId;
 	if (screenID) {
 		switchScreen(screenID)
+		tryPlayAudio("tick", 200);
 		return;
 	}
 
@@ -172,7 +213,7 @@ const suitcaseCodeScroll = function(evt) {
 	const idx = Math.floor(evt.target.scrollTop/evt.target.offsetHeight);
 	if (idx != suitcaseLockScrollIndex[evt.target.id]) {
 		suitcaseLockScrollIndex[evt.target.id] = idx;
-		tryPlayAudio("tick", 0);
+		tryPlayTickAudio();
 	}
 	if (!isTouching) checkSuitcaseCode();
 }
@@ -184,7 +225,7 @@ const checkSuitcaseCode = function() {
 	const l3 = Math.floor(id("suitcase-lock-3").scrollTop/id("suitcase-lock-3").offsetHeight);
 	id("debug").innerText = `${l1} ${l2} ${l3}`;
 	if (l1 == 2 && l2 == 6 && l3 == 4) {
-		switchScreen("win");
+		switchScreen("suitcase-inside");
 	}
 }
 
