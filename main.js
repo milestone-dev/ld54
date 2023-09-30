@@ -34,7 +34,7 @@ const id = function(id) { return document.getElementById(id); }
 const elm = function(selector) { return document.querySelector(selector); }
 const elms = function(selector) { return document.querySelectorAll(selector); }
 const show = function(elm) { elm.classList.add("active"); }
-const hide = function(elm) { elm.classList.remove("active") }; 
+const hide = function(elm) { elm.classList.remove("active"); elm.classList.add("hidden") }; 
 const hideAll = function(selector) {
 	elms(selector).forEach(function(elm) {
 		elm.classList.remove("active");
@@ -86,6 +86,7 @@ const startGame = function(playerID) {
 	if (playerID == 1) switchScreen("suitcase");
 	else if (playerID == 2) switchScreen("symbols");
 	show(playerCanvas);
+	hide(id("start"));
 }
 
 const switchScreen = function(id) {
@@ -99,7 +100,7 @@ const checkSuitcaseCode = function() {
 	const l2 = Math.floor(id("suitcase-lock-2").scrollTop/id("suitcase-lock-2").offsetHeight);
 	const l3 = Math.floor(id("suitcase-lock-3").scrollTop/id("suitcase-lock-3").offsetHeight);
 	console.log(l1,l2,l3);
-	if (l1 == 4 && l2 == 2 && l3 == 6) switchScreen("win");
+	if (l1 == 2 && l2 == 6 && l3 == 4) switchScreen("win");
 }
 
 init();

@@ -11,16 +11,51 @@ html, body {
 	overscroll-behavior: none;
 }
 
+#start {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	width: 100vw;
+	height: 100vh;
+	justify-content: center;
+}
+
+h2 {
+	margin-bottom: 25px;
+	color: #000;
+	text-align: center;
+	font-family: Inclusive Sans;
+	font-size: 32px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	text-transform: uppercase;
+}
+
+#start button {
+	background: #000;
+	color: #FFF;
+	text-align: center;
+	font-family: Inclusive Sans;
+	font-size: 32px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	text-transform: uppercase;
+	margin-bottom: 15px;
+
+}
 
 div.active {
 	display: block;
+}
+div.hidden {
+	display: none !important;
 }
 
 .player-view {
 	display: none;
 }
-
-
 
 .screen {
 	display: none;
