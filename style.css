@@ -8,6 +8,14 @@ div.active {
 
 .screen {
 	display: none;
+	width: 100vw;
+	height: 100vh;
+	align-items: center;
+}
+
+.screen.active {
+	display: flex;
+	flex-direction: row;
 }
 
 *, * {
@@ -38,6 +46,7 @@ img {
 	width: 100%;
 	padding: 5px;
 	background: #eee;
+	position: absolute;
 }
 
 #suitcase-lock-button {
@@ -46,3 +55,4 @@ img {
 	height: 10%;
 	width: 15%;
 }
+

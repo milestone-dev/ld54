@@ -7,6 +7,7 @@ const init = function() {
 	document.addEventListener("mouseup", touchEnd);
 	document.addEventListener("touchcancel", touchCancel);
 	document.addEventListener("touchmove", touchMove);
+	document.addEventListener("click", touchClick);
 
 	document.addEventListener("animationiteration", evt => {
 
@@ -37,13 +38,16 @@ const touchStart = function(evt) {
 	console.log(evt, evt.target);
 }
 
-const touchEnd = function(evt) {
-	console.log(evt, evt.target);
+const touchClick = function(evt) {
 	let screenID = evt.target.dataset.screenId;
 	if (screenID) {
 		console.log(screenID);
 		switchScreen(screenID)
 	}
+}
+
+const touchEnd = function(evt) {
+	console.log(evt, evt.target);
 }
 
 const touchCancel = function(evt) {
