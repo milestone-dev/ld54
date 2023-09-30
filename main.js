@@ -99,7 +99,8 @@ const checkSuitcaseCode = function() {
 	const l1 = Math.floor(id("suitcase-lock-1").scrollTop/id("suitcase-lock-1").offsetHeight);
 	const l2 = Math.floor(id("suitcase-lock-2").scrollTop/id("suitcase-lock-2").offsetHeight);
 	const l3 = Math.floor(id("suitcase-lock-3").scrollTop/id("suitcase-lock-3").offsetHeight);
-	// console.log(l1,l2,l3);
+	id("debug").innerText = `${l1} ${l2} ${l3}`;
+	console.log(l1,l2,l3);
 	if (l1 == 2 && l2 == 6 && l3 == 4) switchScreen("win");
 }
 
