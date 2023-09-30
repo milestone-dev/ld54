@@ -87,6 +87,9 @@ const socketResponse = function(evt) {
 		case "start-game":
 			if (args.playerID == 2) startGame(1);
 		break;
+		case "solve-suitcase":
+			if (args.playerID != playerID) switchScreen("inside-suitcase");
+		break;
 	}
 }
 
@@ -139,9 +142,7 @@ const switchScreen = function(id) {
 	show(currentScreen);
 
 	switch(currentScreen.id) {
-		case "suitcase-inside":
-			tryPlayAudio("discovery")
-		break;
+
 	}
 }
 
@@ -227,6 +228,8 @@ const checkSuitcaseCode = function() {
 	id("debug").innerText = `${l1} ${l2} ${l3}`;
 	if (l1 == 2 && l2 == 6 && l3 == 4) {
 		switchScreen("suitcase-inside");
+		tryPlayAudio("discovery")
+		sendSocketAction("solve-suitcase", {playerID: playerID});
 	}
 }
 
