@@ -1,3 +1,4 @@
+var playerID;
 var playerCanvas;
 var currentScreen;
 
@@ -23,9 +24,13 @@ const init = function() {
 		
 	});
 	console.log("ready");
-	startGame();
+
+	id("suitcase-lock-1").addEventListener("scrollend", (evt) => { checkSuitcaseCode(); })
+	id("suitcase-lock-2").addEventListener("scrollend", (evt) => { checkSuitcaseCode(); })
+	id("suitcase-lock-3").addEventListener("scrollend", (evt) => { checkSuitcaseCode(); })
 };
 
+const id = function(id) { return document.getElementById(id); }
 const elm = function(selector) { return document.querySelector(selector); }
 const elms = function(selector) { return document.querySelectorAll(selector); }
 const show = function(elm) { elm.classList.add("active"); }
@@ -42,7 +47,13 @@ const touchClick = function(evt) {
 	if (screenID) {
 		console.log(screenID);
 		switchScreen(screenID)
+		return;
 	}
+
+	const id = evt.target.id;
+	if (id == "invite-p2" && navigator.share) navigator.share({url:window.location.href});
+	else if (id == "start-p1") startGame(1);
+	else if (id == "start-p2") startGame(2);
 }
 
 const touchStart = function(evt) {
@@ -69,19 +80,26 @@ const scrollEnd = function(evt) {
 	console.log(evt, evt.target);
 }
 
-const startGame = function() {
-	playerCanvas = elm("#p1");
-	// playerCanvas = elm("#p2");
+const startGame = function(playerID) {
+	playerID = playerID;
+	playerCanvas = id(`p${playerID}`);
+	if (playerID == 1) switchScreen("suitcase");
+	else if (playerID == 2) switchScreen("symbols");
 	show(playerCanvas);
-	
-	switchScreen("suitcase");
-	// switchScreen("symbols");
 }
 
 const switchScreen = function(id) {
 	hideAll(".screen");
 	currentScreen = elm(`#${id}`);
 	show(currentScreen);
+}
+
+const checkSuitcaseCode = function() {
+	const l1 = Math.floor(id("suitcase-lock-1").scrollTop/id("suitcase-lock-1").offsetHeight);
+	const l2 = Math.floor(id("suitcase-lock-2").scrollTop/id("suitcase-lock-2").offsetHeight);
+	const l3 = Math.floor(id("suitcase-lock-3").scrollTop/id("suitcase-lock-3").offsetHeight);
+	console.log(l1,l2,l3);
+	if (l1 == 4 && l2 == 2 && l3 == 6) switchScreen("win");
 }
 
 init();
