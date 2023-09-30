@@ -123,8 +123,7 @@ button {
 	top: 0;
 	left: 0;
 	background: transparent;
-	border: 0;
-	border: 1px solid red;
+	border: 0px solid red;
 }
 
 #top-bar {
