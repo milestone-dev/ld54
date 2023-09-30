@@ -7,6 +7,8 @@ const init = function() {
 	document.addEventListener("mouseup", touchEnd);
 	document.addEventListener("touchcancel", touchCancel);
 	document.addEventListener("touchmove", touchMove);
+	document.addEventListener("scrollend", scrollEnd);
+	document.addEventListener("scroll", scroll);
 	document.addEventListener("click", touchClick);
 
 	document.addEventListener("animationiteration", evt => {
@@ -34,9 +36,6 @@ const hideAll = function(selector) {
 	});
 }
 
-const touchStart = function(evt) {
-	console.log(evt, evt.target);
-}
 
 const touchClick = function(evt) {
 	let screenID = evt.target.dataset.screenId;
@@ -46,15 +45,27 @@ const touchClick = function(evt) {
 	}
 }
 
+const touchStart = function(evt) {
+	// console.log(evt, evt.target);
+}
+
 const touchEnd = function(evt) {
-	console.log(evt, evt.target);
+	// console.log(evt, evt.target);
 }
 
 const touchCancel = function(evt) {
-	console.log(evt, evt.target);
+	// console.log(evt, evt.target);
 }
 
 const touchMove = function(evt) {
+	// console.log(evt, evt.target);
+}
+
+const scroll = function(evt) {
+	console.log(evt, evt.target);
+}
+
+const scrollEnd = function(evt) {
 	console.log(evt, evt.target);
 }
 
