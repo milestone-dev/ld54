@@ -3,9 +3,46 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="style.css">
 	<title>Encrypted</title>
 </head>
 <body>
+	<div id="p1" class="player-view">
+		<div id="top-bar">You are Player 1</div>
+		<div class="screen" id="suitcase">
+			<div class="image">
+				<img src="img/suitcase.png"></img>
+				<button id="suitcase-lock-button" data-screen-id="suitcase-lock"></button>
+			</div>
+		</div>
+		<div class="screen" id="suitcase-lock">
+			<button id="suitcase-lock-back" data-screen-id="suitcase">Back</button>
 
+			[_] [_] [_]
+			<button id="s1">1</button>
+			<button id="s2">2</button>
+			<button id="s3">3</button>
+			<button id="s4">4</button>
+			<button id="s5">5</button>
+			<button id="s6">6</button>
+			<button id="s7">7</button>
+			<button id="s8">8</button>
+			<button id="s9">9</button>
+			
+		</div>
+	</div>
+	<div id="p2" class="player-view">
+		<div id="top-bar">You are Player 2</div>
+		<div class="screen" id="symbols">
+			<button id="symbol-star">✶</button>
+			<button id="symbol-moon">☽</button>
+			<button id="symbol-pyramid">▲</button>
+			<button id="symbol-sun">☀</button>
+
+		</div>
+		
+
+	</div>
+	<script type="text/javascript" src="main.js"></script>
 </body>
 </html>

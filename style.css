@@ -1,0 +1,48 @@
+div.active {
+	display: block;
+}
+
+.player-view {
+	display: none;
+}
+
+.screen {
+	display: none;
+}
+
+*, * {
+	font-family: sans-serif;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
+
+img {
+	max-width: 100%;
+	position: relative;
+}
+
+.image {
+	position: relative;
+}
+
+.image button {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: rgb(255, 255, 255, 0.5);
+	border: 0;
+}
+
+#top-bar {
+	width: 100%;
+	padding: 5px;
+	background: #eee;
+}
+
+#suitcase-lock-button {
+	top: 25%;
+	left: 20%;
+	height: 10%;
+	width: 15%;
+}
