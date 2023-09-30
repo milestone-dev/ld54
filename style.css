@@ -79,6 +79,11 @@ img {
 	position: relative;
 }
 
+button {
+	background: transparent;
+	border: 0;
+}
+
 .image {
 	position: relative;
 }
@@ -88,7 +93,6 @@ img {
 	top: 0;
 	left: 0;
 	background: transparent;
-	border: 2px solid rgb(255, 255, 255, 0.7);
 	border: 0;
 }
 
@@ -116,7 +120,7 @@ button.back {
 	border: 0;
 }
 
-button.back img {
+button img {
 	width: 100%;
 	pointer-events: none;
 }

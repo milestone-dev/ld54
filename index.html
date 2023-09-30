@@ -34,12 +34,27 @@
 
 	</div>
 	<div id="p2" class="player-view">
-		<div class="screen" id="symbols">
-			<button id="symbol-star"><img src="img/star.png"></button>
-			<button id="symbol-moon"><img src="img/moon.png"></button>
-			<button id="symbol-cloud"><img src="img/cloud.png"></button>
-			<button id="symbol-sun"><img src="img/sun.png"></button>
-
+		<div class="screen" id="weather-symbols">
+			<div>
+				<button data-screen-id="weather-symbols-star" id="symbol-star"><img src="img/star.png"></button>
+				<button data-screen-id="weather-symbols-moon" id="symbol-moon"><img src="img/moon.png"></button>
+			</div>
+			<div>
+				<button data-screen-id="weather-symbols-cloud" id="symbol-cloud"><img src="img/cloud.png"></button>
+				<button data-screen-id="weather-symbols-sun" id="symbol-sun"><img src="img/sun.png"></button>
+			</div>
+		</div>
+		<div class="screen" id="weather-symbols-star">
+			<button class="back" data-screen-id="weather-symbols"><img src="img/close.png"></button><img src="img/numbers-735.png">
+		</div>
+		<div class="screen" id="weather-symbols-moon">
+			<button class="back" data-screen-id="weather-symbols"><img src="img/close.png"></button><img src="img/numbers-264.png">
+		</div>
+		<div class="screen" id="weather-symbols-cloud">
+			<button class="back" data-screen-id="weather-symbols"><img src="img/close.png"></button><img src="img/numbers-816.png">
+		</div>
+		<div class="screen" id="weather-symbols-sun">
+			<button class="back" data-screen-id="weather-symbols"><img src="img/close.png"></button><img src="img/numbers-999.png">
 		</div>
 		
 

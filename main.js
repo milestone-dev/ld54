@@ -84,7 +84,7 @@ const startGame = function(playerID) {
 	playerID = playerID;
 	playerCanvas = id(`p${playerID}`);
 	if (playerID == 1) switchScreen("suitcase");
-	else if (playerID == 2) switchScreen("symbols");
+	else if (playerID == 2) switchScreen("weather-symbols");
 	show(playerCanvas);
 	hide(id("start"));
 }
