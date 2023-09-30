@@ -1,6 +1,8 @@
 var playerID;
 var playerCanvas;
 var currentScreen;
+var socketConnection;
+var isTouching = false;
 
 const init = function() {
 	document.addEventListener("touchstart", touchStart);
@@ -23,11 +25,10 @@ const init = function() {
 	document.addEventListener("transitionend", evt => {
 		
 	});
-	console.log("ready");
 
-	id("suitcase-lock-1").addEventListener("scrollend", (evt) => { checkSuitcaseCode(); })
-	id("suitcase-lock-2").addEventListener("scrollend", (evt) => { checkSuitcaseCode(); })
-	id("suitcase-lock-3").addEventListener("scrollend", (evt) => { checkSuitcaseCode(); })
+	id("suitcase-lock-1").addEventListener("scroll", (evt) => { if (!isTouching) checkSuitcaseCode(); })
+	id("suitcase-lock-2").addEventListener("scroll", (evt) => { if (!isTouching) checkSuitcaseCode(); })
+	id("suitcase-lock-3").addEventListener("scroll", (evt) => { if (!isTouching) checkSuitcaseCode(); })
 };
 
 const id = function(id) { return document.getElementById(id); }
@@ -45,7 +46,6 @@ const hideAll = function(selector) {
 const touchClick = function(evt) {
 	let screenID = evt.target.dataset.screenId;
 	if (screenID) {
-		console.log(screenID);
 		switchScreen(screenID)
 		return;
 	}
@@ -57,14 +57,17 @@ const touchClick = function(evt) {
 }
 
 const touchStart = function(evt) {
+	isTouching = true;
 	// console.log(evt, evt.target);
 }
 
 const touchEnd = function(evt) {
+	isTouching = false;
 	// console.log(evt, evt.target);
 }
 
 const touchCancel = function(evt) {
+	isTouching = false;
 	// console.log(evt, evt.target);
 }
 
@@ -96,12 +99,17 @@ const switchScreen = function(id) {
 }
 
 const checkSuitcaseCode = function() {
+	if (currentScreen.id != "suitcase-lock") return;
 	const l1 = Math.floor(id("suitcase-lock-1").scrollTop/id("suitcase-lock-1").offsetHeight);
 	const l2 = Math.floor(id("suitcase-lock-2").scrollTop/id("suitcase-lock-2").offsetHeight);
 	const l3 = Math.floor(id("suitcase-lock-3").scrollTop/id("suitcase-lock-3").offsetHeight);
 	id("debug").innerText = `${l1} ${l2} ${l3}`;
-	console.log(l1,l2,l3);
 	if (l1 == 2 && l2 == 6 && l3 == 4) switchScreen("win");
+}
+
+const openSocketConnection = function() {
+	socketConnection = new WebSocket("ws://localhost:6502", "json");
+	console.log(socketConnection);
 }
 
 init();
