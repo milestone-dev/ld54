@@ -1,5 +1,9 @@
-html {
+*, * {
 	overscroll-behavior: none;
+	font-family: sans-serif;
+	text-align: center;
+	margin: 0;
+	padding: 0;
 }
 
 div.active {
@@ -25,13 +29,6 @@ div.active {
 
 .screen.active {
 	display: flex;
-}
-
-*, * {
-	font-family: sans-serif;
-	text-align: center;
-	margin: 0;
-	padding: 0;
 }
 
 img {
