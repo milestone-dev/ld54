@@ -27,11 +27,9 @@ wsServer.on('request', function(request) {
 	console.log("Request");
 
 	let connection = request.accept("json", request.origin);
-	let response = {
-		message: "hi",
-	};
-	connection.sendUTF(JSON.stringify(response));
 	connections.push(connection);
+	
+	// connection.sendUTF(JSON.stringify({message:"hi"}));
 
 	connection.on('message', function(message) {
 		if (message.type === 'utf8') {

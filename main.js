@@ -31,8 +31,8 @@ const init = function() {
 	id("suitcase-lock-3").addEventListener("scroll", (evt) => { if (!isTouching) checkSuitcaseCode(); })
 
 	openSocketConnection();
-	if(window.location.search.indexOf("?p=") != -1) {
-		let parts = window.location.search.split("?p=");
+	if(window.location.search.indexOf("?player=") != -1) {
+		let parts = window.location.search.split("?player=");
 		if (parts.length > 1) {
 			startGame(parseInt(parts[1]));
 		}
