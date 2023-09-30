@@ -1,26 +1,13 @@
-*, * {
-	overscroll-behavior: none;
-	font-family: sans-serif;
-	text-align: center;
-	margin: 0;
-	padding: 0;
-}
-
-html {
-	touch-action: none;
-	min-height: 100%;
-}
-
-body {
-	overflow: hidden;
-}
-
 div.active {
 	display: block;
 }
 
 .player-view {
 	display: none;
+}
+
+html {
+	touch-action: none;
 }
 
 .screen {
@@ -38,6 +25,13 @@ div.active {
 
 .screen.active {
 	display: flex;
+}
+
+*, * {
+	font-family: sans-serif;
+	text-align: center;
+	margin: 0;
+	padding: 0;
 }
 
 img {
@@ -75,8 +69,15 @@ button.back {
 	position: absolute;
 	top: 5%;
 	left: 5%;
-	min-width: 48px;
-	min-height: 48px;
+	width: 48px;
+	height: 48px;
+	background: transparent;
+	border: 0;
+}
+
+button.back img {
+	width: 100%;
+	pointer-events: none;
 }
 
 .scrollable {
@@ -85,7 +86,7 @@ button.back {
 	border: 1px solid #222;
 	overflow: auto;
 	scroll-snap-type: y mandatory;
-	touch-action: pan-up, pan-down;
+	touch-action: pan-y;
 }
 
 .scrollable span {
