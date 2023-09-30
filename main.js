@@ -119,7 +119,7 @@ const touchClick = function(evt) {
 	if (id == "invite-p2" && navigator.share) {
 		navigator.share({
 			url:window.location.href + "?player=2",
-			title:window.title + " - Join the game!",
+			title:document.title + " - Join the game!",
 		});
 	}
 	else if (id == "start-p1") startGame(1);
