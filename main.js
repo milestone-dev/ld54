@@ -3,6 +3,13 @@ var playerCanvas;
 var currentScreen;
 var socketConnection;
 var isTouching = false;
+var audio = {
+	tick:new Audio("audio/tick.mp3")
+};
+var audioLastPlayed = {
+	tick:new Date().valueOf()
+}
+var suitcaseLockScrollIndex = {}
 
 const init = function() {
 	document.addEventListener("touchstart", touchStart);
@@ -26,9 +33,10 @@ const init = function() {
 		
 	});
 
-	id("suitcase-lock-1").addEventListener("scroll", (evt) => { if (!isTouching) checkSuitcaseCode(); })
-	id("suitcase-lock-2").addEventListener("scroll", (evt) => { if (!isTouching) checkSuitcaseCode(); })
-	id("suitcase-lock-3").addEventListener("scroll", (evt) => { if (!isTouching) checkSuitcaseCode(); })
+
+	id("suitcase-lock-1").addEventListener("scroll", suitcaseCodeScroll);
+	id("suitcase-lock-2").addEventListener("scroll", suitcaseCodeScroll);
+	id("suitcase-lock-3").addEventListener("scroll", suitcaseCodeScroll);
 
 	openSocketConnection();
 	if(window.location.search.indexOf("?player=") != -1) {
@@ -38,6 +46,41 @@ const init = function() {
 		}
 	}
 };
+
+// Network
+
+const openSocketConnection = function() {
+	var url = "ws://46.246.44.156:6502";
+	if (window.location.href.indexOf("localhost") != -1) {
+		url = "ws://localhost:6502";
+	}
+	socketConnection = new WebSocket(url, "json");
+	socketConnection.onmessage = socketResponse;
+}
+
+const sendSocketAction = function(actionID, args) {
+	if (!socketConnection) return;
+	if (socketConnection.readyState == 0) {
+		socketConnection.onopen = function(evt) {
+			socketConnection.send(JSON.stringify({action:actionID, args:args}));
+		}
+	} else if (socketConnection.readyState == 1) {
+		socketConnection.send(JSON.stringify({action:actionID, args:args}));
+	}
+}
+
+const socketResponse = function(evt) {
+	const data = JSON.parse(evt.data);
+	const action = data.action;
+	const args = data.args;
+	switch(action) {
+		case "start-game":
+			if (args.playerID == 2) startGame(1);
+		break;
+	}
+}
+
+// Utils 
 
 const id = function(id) { return document.getElementById(id); }
 const elm = function(selector) { return document.querySelector(selector); }
@@ -49,7 +92,21 @@ const hideAll = function(selector) {
 		elm.classList.remove("active");
 	});
 }
+const tryPlayAudio = function(key, timeout) {
+	if (new Date().valueOf() - audioLastPlayed[key] > timeout) {
+		audioLastPlayed[key] = new Date().valueOf();
 
+		audio[key].cloneNode().play();
+	}
+}
+
+const switchScreen = function(id) {
+	hideAll(".screen");
+	currentScreen = elm(`#${id}`);
+	show(currentScreen);
+}
+
+// Events
 
 const touchClick = function(evt) {
 	let screenID = evt.target.dataset.screenId;
@@ -96,6 +153,8 @@ const scrollEnd = function(evt) {
 	console.log(evt, evt.target);
 }
 
+// Game loop
+
 const startGame = function(playerID) {
 	playerID = playerID;
 	playerCanvas = id(`p${playerID}`);
@@ -106,10 +165,16 @@ const startGame = function(playerID) {
 	sendSocketAction("start-game", {playerID: playerID});
 }
 
-const switchScreen = function(id) {
-	hideAll(".screen");
-	currentScreen = elm(`#${id}`);
-	show(currentScreen);
+// Screen specific
+
+const suitcaseCodeScroll = function(evt) {
+	if (!suitcaseLockScrollIndex[evt.target.id]) suitcaseLockScrollIndex[evt.target.id] = 0;
+	const idx = Math.floor(evt.target.scrollTop/evt.target.offsetHeight);
+	if (idx != suitcaseLockScrollIndex[evt.target.id]) {
+		suitcaseLockScrollIndex[evt.target.id] = idx;
+		tryPlayAudio("tick", 0);
+	}
+	if (!isTouching) checkSuitcaseCode();
 }
 
 const checkSuitcaseCode = function() {
@@ -120,37 +185,6 @@ const checkSuitcaseCode = function() {
 	id("debug").innerText = `${l1} ${l2} ${l3}`;
 	if (l1 == 2 && l2 == 6 && l3 == 4) {
 		switchScreen("win");
-	}
-}
-
-const openSocketConnection = function() {
-	var url = "ws://46.246.44.156:6502";
-	if (window.location.href.indexOf("localhost") != -1) {
-		url = "ws://localhost:6502";
-	}
-	socketConnection = new WebSocket(url, "json");
-	socketConnection.onmessage = socketResponse;
-}
-
-const sendSocketAction = function(actionID, args) {
-	if (!socketConnection) return;
-	if (socketConnection.readyState == 0) {
-		socketConnection.onopen = function(evt) {
-			socketConnection.send(JSON.stringify({action:actionID, args:args}));
-		}
-	} else if (socketConnection.readyState == 1) {
-		socketConnection.send(JSON.stringify({action:actionID, args:args}));
-	}
-}
-
-const socketResponse = function(evt) {
-	const data = JSON.parse(evt.data);
-	const action = data.action;
-	const args = data.args;
-	switch(action) {
-		case "start-game":
-			if (args.playerID == 2) startGame(1);
-		break;
 	}
 }
 
