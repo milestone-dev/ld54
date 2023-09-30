@@ -48,6 +48,7 @@ h2 {
 	font-weight: 400;
 	line-height: normal;
 	text-transform: uppercase;
+	padding: 0 25px;
 }
 
 #start-buttons {
@@ -123,6 +124,7 @@ button {
 	left: 0;
 	background: transparent;
 	border: 0;
+	border: 1px solid red;
 }
 
 #top-bar {
@@ -130,13 +132,6 @@ button {
 	padding: 5px;
 	background: #eee;
 	position: absolute;
-}
-
-#suitcase-lock-button {
-	top: 25%;
-	left: 20%;
-	height: 10%;
-	width: 15%;
 }
 
 button.back {
@@ -185,8 +180,21 @@ button img {
 .scrollable span:nth-of-type(9) {background-position-y: calc(280px *-8); }
 .scrollable span:nth-of-type(10) {background-position-y: calc(280px *-9); }
 
+#suitcase-lock-button {
+	top: 25%;
+	left: 20%;
+	height: 10%;
+	width: 15%;
+}
 
 #suitcase-lock {
 	background: #926C50 url(img/suitcase-lock.png) no-repeat center center;
 	background-size: contain;
+}
+
+#snowman-button {
+	top: 4%;
+	left: 12%;
+	height: 30%;
+	width: 15%;
 }

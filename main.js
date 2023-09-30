@@ -12,6 +12,7 @@ var suitcaseLockScrollIndex = {}
 var tickAudioPlayerIndex = 0;
 var tickAudioPlayers = [];
 var audioPlayersWarmed = false;
+var snowmanButtonClicks = 0;
 
 const init = function() {
 	for (let i = 0; i < 15; i++) {
@@ -79,19 +80,7 @@ const sendSocketAction = function(actionID, args) {
 	}
 }
 
-const socketResponse = function(evt) {
-	const data = JSON.parse(evt.data);
-	const action = data.action;
-	const args = data.args;
-	switch(action) {
-		case "start-game":
-			if (args.playerID == 2) startGame(1);
-		break;
-		case "solve-suitcase":
-			if (args.playerID != playerID) switchScreen("inside-suitcase");
-		break;
-	}
-}
+
 
 // Utils 
 
@@ -108,7 +97,6 @@ const hideAll = function(selector) {
 const tryPlayTickAudio = function() {
 	if (tickAudioPlayerIndex < tickAudioPlayers.length - 1) tickAudioPlayerIndex++;
 	else tickAudioPlayerIndex = 0;
-	console.log(tickAudioPlayerIndex);
 	tickAudioPlayers[tickAudioPlayerIndex].play();
 }
 
@@ -159,14 +147,47 @@ const touchClick = function(evt) {
 	}
 
 	const id = evt.target.id;
-	if (id == "invite-p2" && navigator.share) {
-		navigator.share({
-			url:window.location.href + "?player=2",
-			title:document.title + " - Join the game!",
-		});
+	switch(id) {
+		case "invite-p2":
+			if (navigator.share) {
+				navigator.share({
+					url:window.location.href + "?player=2",
+					title:document.title + " - Join the game!",
+				});
+			}
+			break;
+		case "start-p1": 
+			startGame(1);
+			break;
+		case "start-p2": 
+			startGame(2);
+			break;
+		case "snowman-button": 
+			snowmanButtonClicks++;
+			if (snowmanButtonClicks > 5) {
+				sendSocketAction("solve-snowman", {playerID: playerID});
+				tryPlayAudio("discovery")
+				switchScreen("snow-land");
+			}
+			break;
 	}
-	else if (id == "start-p1") startGame(1);
-	else if (id == "start-p2") startGame(2);
+}
+
+const socketResponse = function(evt) {
+	const data = JSON.parse(evt.data);
+	const action = data.action;
+	const args = data.args;
+	switch(action) {
+		case "start-game":
+			if (args.playerID == 2) startGame(1);
+		break;
+		case "solve-suitcase":
+			if (args.playerID != playerID) tryPlayAudio("discovery");
+		break;
+		case "solve-snowman":
+			if (args.playerID != playerID) tryPlayAudio("discovery");
+		break;
+	}
 }
 
 const touchStart = function(evt) {
@@ -198,8 +219,8 @@ const scrollEnd = function(evt) {
 
 // Game loop
 
-const startGame = function(playerID) {
-	playerID = playerID;
+const startGame = function(newPlayerID) {
+	playerID = newPlayerID;
 	playerCanvas = id(`p${playerID}`);
 	if (playerID == 1) switchScreen("suitcase");
 	else if (playerID == 2) switchScreen("weather-symbols");
