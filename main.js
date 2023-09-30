@@ -119,6 +119,7 @@ const tryPlayAudio = function(key, timeout) {
 }
 
 const warmUpAudioPlayers = function() {
+	audioPlayersWarmed = true;
 	tickAudioPlayers.forEach(player => {
 		player.volume = 0;
 		player.play();
