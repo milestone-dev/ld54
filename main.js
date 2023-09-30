@@ -119,7 +119,7 @@ const checkSuitcaseCode = function() {
 }
 
 const openSocketConnection = function() {
-	var url = "ws://46.21.104.84:6502";
+	var url = "ws://46.246.44.156:6502";
 	if (window.location.href.indexOf("localhost") != -1) {
 		url = "ws://localhost:6502";
 	}
