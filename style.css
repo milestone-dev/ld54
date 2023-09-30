@@ -63,7 +63,7 @@ div.hidden {
 	height: 100vh;
 	align-items: center;
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: center;
 }
 
 .screen.rows {
@@ -122,18 +122,22 @@ button.back img {
 }
 
 .scrollable {
-	width: 25%;
+	width: 100px;
 	height: 200px;
 	overflow: auto;
 	scroll-snap-type: y mandatory;
 	touch-action: pan-y;
 }
 
+.scrollable::-webkit-scrollbar {
+    display: none;
+}
+
 .scrollable span {
 	scroll-snap-align: start;
 	background: transparent url(img/numbers.png);
 	display: block;
-	width: 100%;
+	width: 100px;
 	height: 200px;
 	text-indent: -9999px;
 }
@@ -151,4 +155,5 @@ button.back img {
 
 #suitcase-lock {
 	background: #926C50 url(img/suitcase-lock.png) no-repeat center center;
+	background-size: contain;
 }
