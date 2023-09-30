@@ -19,7 +19,6 @@ const init = function() {
 		let a = new Audio();
 		a.src = "audio/empty.mp3";
 		a.actualSrc = "audio/tick.mp3";
-		// a.volume = 0;
 		tickAudioPlayers[i] = a;
 	}
 	Object.values(audioPlayers).forEach((player) => {
@@ -109,7 +108,6 @@ const tryPlayAudio = function(key, timeout) {
 	if (timeout == null) timeout = 500;
 	if (new Date().valueOf() - audioLastPlayed[key] > timeout) {
 		audioLastPlayed[key] = new Date().valueOf();
-		audioPlayers[key].volume = 1;
 		audioPlayers[key].play();
 	}
 }
@@ -117,7 +115,6 @@ const tryPlayAudio = function(key, timeout) {
 const warmUpAudioPlayers = function() {
 	audioPlayersWarmed = true;
 	tickAudioPlayers.forEach(player => {
-		// player.volume = 0;
 		player.play();
 		player.addEventListener("ended", evt => {
 			evt.target.src = event.target.actualSrc;
