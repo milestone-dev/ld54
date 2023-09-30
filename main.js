@@ -16,11 +16,16 @@ var snowmanButtonClicks = 0;
 
 const init = function() {
 	for (let i = 0; i < 15; i++) {
-		let a = new Audio("audio/tick.mp3");
-		a.volume = 0;
+		let a = new Audio();
+		a.src = "audio/empty.mp3";
+		a.actualSrc = "audio/tick.mp3";
+		// a.volume = 0;
 		tickAudioPlayers[i] = a;
 	}
-	Object.values(audioPlayers).forEach((player) => player.volume = 0);
+	Object.values(audioPlayers).forEach((player) => {
+		player.actualSrc = player.src;
+		player.src = "audio/empty.mp3";
+	});
 	Object.keys(audioPlayers).forEach((key) => audioLastPlayed[key] = new Date().valueOf());
 
 	document.addEventListener("touchstart", touchStart);
@@ -112,14 +117,19 @@ const tryPlayAudio = function(key, timeout) {
 const warmUpAudioPlayers = function() {
 	audioPlayersWarmed = true;
 	tickAudioPlayers.forEach(player => {
-		player.volume = 0;
+		// player.volume = 0;
 		player.play();
-		window.setTimeout(e => player.volume = 1, 1000);
+		player.addEventListener("ended", evt => {
+			evt.target.src = event.target.actualSrc;
+		})
 	});
 
 	Object.values(audioPlayers).forEach(player => {
-		player.volume = 0;
+		// player.volume = 0;
 		player.play();
+		player.addEventListener("ended", evt => {
+			evt.target.src = event.target.actualSrc;
+		})
 	});
 
 }
