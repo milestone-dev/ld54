@@ -71,8 +71,11 @@ const scrollEnd = function(evt) {
 
 const startGame = function() {
 	playerCanvas = elm("#p1");
+	// playerCanvas = elm("#p2");
 	show(playerCanvas);
+	
 	switchScreen("suitcase");
+	// switchScreen("symbols");
 }
 
 const switchScreen = function(id) {

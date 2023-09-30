@@ -6,6 +6,15 @@
 	padding: 0;
 }
 
+html {
+	touch-action: none;
+	min-height: 100%;
+}
+
+body {
+	overflow: hidden;
+}
+
 div.active {
 	display: block;
 }
@@ -76,6 +85,7 @@ button.back {
 	border: 1px solid #222;
 	overflow: auto;
 	scroll-snap-type: y mandatory;
+	touch-action: pan-up, pan-down;
 }
 
 .scrollable span {
