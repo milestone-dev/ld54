@@ -59,7 +59,12 @@ const touchClick = function(evt) {
 	}
 
 	const id = evt.target.id;
-	if (id == "invite-p2" && navigator.share) navigator.share({url:window.location.href + "?player=2"});
+	if (id == "invite-p2" && navigator.share) {
+		navigator.share({
+			url:window.location.href + "?player=2",
+			title:window.title + " - Join the game!",
+		});
+	}
 	else if (id == "start-p1") startGame(1);
 	else if (id == "start-p2") startGame(2);
 }
