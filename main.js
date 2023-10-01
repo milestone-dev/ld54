@@ -1,5 +1,5 @@
-var cheat = true;
-var debugMode = true;
+var cheat = false;
+var debugMode = false;
 var playerID;
 var playerCanvas;
 var currentScreen;

@@ -134,8 +134,8 @@ button {
 	left: 0;
 	background: transparent;
 	border: 0px solid red;
-	width: 48px;
-	height: 48px;
+	min-width: 48px;
+	min-height: 48px;
 }
 
 #top-bar {
@@ -153,6 +153,7 @@ button.back {
 	height: 48px;
 	background: transparent;
 	border: 0;
+	z-index: 10;
 }
 
 button img {
@@ -226,9 +227,21 @@ button img {
 	width: 25%;
 }
 
-#suitcase-lock {
+#suitcase-lock, #suitcase-compartment-lock, #music-box-lock, #photo-book-lock {
 	background: #926C50 url(img/suitcase-lock.png) no-repeat center center;
 	background-size: contain;
+}
+
+#music-box-lock {
+	background: #926C50 url(img/music-box-lock.png) no-repeat center center;
+}
+
+#music-box-lock {
+	background: #926C50 url(img/photo-book-lock.png) no-repeat center center;	
+}
+
+#suitcase-compartment-lock {
+	background: #926C50 url(img/suitcase-compartment-lock.png) no-repeat center center;	
 }
 
 #battery-button {
@@ -260,36 +273,30 @@ button img {
 #photo-right-button {
 	top: 23%;
 	left: 25%;
-	height: 30%;
-	width: 15%;
 }
 
 #radio-button {
 	top: 25%;
 	left: 25%;
-	width:22%;
-	height: 14%;
 }
 
 #letter-button {
 	top: 45%;
 	left: 32%;
-	width:22%;
-	height: 14%;
 }
 
 #photo-left-button {
 	top: 65%;
 	left: 52%;
-	width:22%;
-	height: 14%;
 }
 
 #suitcase-compartment-button {
 	top: 75%;
 	left: 12%;
-	width:22%;
-	height: 14%;
+}
+
+button img {
+	max-width: auto;
 }
 
 #qr-view {
@@ -298,10 +305,10 @@ button img {
 	image-rendering: pixelated;
 }
 
-#suitcase-left, #suitcase-right, #suitcase-sticker, #suitcase-tag, #suitcase-logo, #suitcase-card {
+#suitcase-left, #suitcase-right, #suitcase-sticker, #suitcase-tag, #suitcase-logo, #suitcase-card, #photo-left, #photo-right {
 	background: #926C50;
 }
 
-#suitcase-left img, #suitcase-right img {
+#suitcase-left > .image > img, #suitcase-right > .image > img {
 	height: 100vh;
 }
