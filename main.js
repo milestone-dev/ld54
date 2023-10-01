@@ -13,7 +13,7 @@ var tickAudioPlayerIndex = 0;
 var tickAudioPlayers = [];
 var audioPlayersWarmed = false;
 var snowmanButtonClicks = 0;
-var socketURL = window.location.href.indexOf("localhost") != == -1 ? "ws://46.246.44.156:6502" : "ws://localhost:6502";
+var socketURL = window.location.href.indexOf("localhost") == -1 ? "ws://46.246.44.156:6502" : "ws://localhost:6502";
 
 const init = function() {
 	for (let i = 0; i < 15; i++) {
