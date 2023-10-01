@@ -292,7 +292,13 @@ button img {
 	height: 14%;
 }
 
-#suitcase-left, #suitcase-right {
+#qr-view {
+	background: #000 url("img/qr-large.png");
+	background-size: cover;
+	image-rendering: pixelated;
+}
+
+#suitcase-left, #suitcase-right, #suitcase-sticker, #suitcase-tag, #suitcase-logo, #suitcase-card {
 	background: #926C50;
 }
 
