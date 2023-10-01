@@ -13,10 +13,8 @@
 		<h2>2 player game</h2>
 
 		<div id="start-buttons">
-			<button id="invite-p2">Invite Player 2</button>
-			<p>or join manually</p>
 			<button class="secondary" id="start-p1">Start as Player 1</button>
-			<button class="secondary" id="start-p2">Start as Player 2</button>
+			<button class="secondary" id="start-p2">(Start as Player 2)</button>
 		</div>
 	</div>
 	<div id="p1" class="player-view">
@@ -32,9 +30,9 @@
 		</div>
 		<div class="screen" id="suitcase-lock">
 			<button id="suitcase-lock-back" class="back" data-screen-id="suitcase"><img src="img/close.png"></button>
-			<div id="suitcase-lock-1" class="scrollable"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
-			<div id="suitcase-lock-2" class="scrollable"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
-			<div id="suitcase-lock-3" class="scrollable"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+			<div id="suitcase-lock-1" class="scrollable suitcase-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+			<div id="suitcase-lock-2" class="scrollable suitcase-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+			<div id="suitcase-lock-3" class="scrollable suitcase-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
 		</div>
 		<div class="screen" id="suitcase-tag">
 			<button class="back" data-screen-id="suitcase"><img src="img/close.png"></button>
@@ -52,47 +50,89 @@
 			<button class="back" data-screen-id="suitcase"><img src="img/close.png"></button>
 			Travel agency Moon!
 		</div>
-		<div class="screen rows" id="suitcase-inside">
-			<h2>You unlock the suitcase.</h2>
-			<p>☃ - Hey, watch my head!</p>
+		<div class="screen" id="suitcase-left">
+			<div class="image">
+				<img src="img/suitcase-left.png">
+				<button id="radio-button" data-screen-id="radio-unpowered">FM Radio</button>
+				<button id="letter-button" data-screen-id="letter">Letter</button>
+				<button id="photo-left-button" data-screen-id="photo-left">Photo left</button>
+				<button id="suitcase-compartment-button" data-screen-id="suitcase-compartment-lock">Suitcase zipper</button>				
+			</div>
+		</div>
+
+		<div class="screen" id="radio-unpowered">
+			<button class="back" data-screen-id="suitcase-left"><img src="img/close.png"></button>
+			Radio unpowered
+		</div>
+
+		<div class="screen" id="radio-powered">
+			<button class="back" data-screen-id="suitcase-left" data-stop-audio-id="radio"><img src="img/close.png"></button>
+			Radio powered
+		</div>
+
+		<div class="screen" id="letter">
+			<button class="back" data-screen-id="suitcase-left"><img src="img/close.png"></button>
+			Letter
+		</div>
+		<div class="screen" id="photo-left">
+			<button class="back" data-screen-id="suitcase-left"><img src="img/close.png"></button>
+			Left half of photo
+		</div>
+		<div class="screen" id="suitcase-compartment-lock">
+			<button class="back" data-screen-id="suitcase-left"><img src="img/close.png"></button>
+			<div id="suitcase-compartment-lock-1" class="scrollable suitcase-compartment-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+			<div id="suitcase-compartment-lock-2" class="scrollable suitcase-compartment-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+			<div id="suitcase-compartment-lock-3" class="scrollable suitcase-compartment-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+		</div>
+		<div class="screen" id="win-p1">
+			<h2>Win P1</h2>
 		</div>
 	</div>
 	<div id="p2" class="player-view">
 		<div class="screen" id="qr-view">
 			<img src="img/qr-large.png">
-		</div>
-
-		<div class="screen" id="weather-symbols">
-			<div>
-				<button data-screen-id="weather-symbols-star" id="symbol-star"><img src="img/star.png"></button>
-				<button data-screen-id="weather-symbols-moon" id="symbol-moon"><img src="img/moon.png"></button>
-			</div>
-			<div>
-				<button data-screen-id="weather-symbols-cloud" id="symbol-cloud"><img src="img/cloud.png"></button>
-				<button data-screen-id="weather-symbols-sun" id="symbol-sun"><img src="img/sun.png"></button>
-			</div>
-		</div>
-		<div class="screen" id="weather-symbols-star">
-			<button class="back" data-screen-id="weather-symbols"><img src="img/close.png"></button><img src="img/numbers-735.png">
-		</div>
-		<div class="screen" id="weather-symbols-moon">
-			<button class="back" data-screen-id="weather-symbols"><img src="img/close.png"></button><img src="img/numbers-264.png">
-		</div>
-		<div class="screen" id="weather-symbols-cloud">
-			<button class="back" data-screen-id="weather-symbols"><img src="img/close.png"></button>
+		</div>		
+		<div class="screen" id="suitcase-right">
 			<div class="image">
-				<img src="img/numbers-816.png">
-				<button id="snowman-button"></button>
+				<img src="img/suitcase-right.png">
+				<button id="music-box-button" data-screen-id="music-box-lock">Music box</button>
+				<button id="photo-book-button" data-screen-id="photo-book-lock">Photo book</button>			
+				<button id="battery-button">Battery</button>
 			</div>
-		</div>
-		<div class="screen" id="weather-symbols-sun">
-			<button class="back" data-screen-id="weather-symbols"><img src="img/close.png"></button><img src="img/numbers-999.png">
-		</div>
-		<div class="screen rows" id="snow-land">
-			<h2>You made it to the snow man's icy palace!</h2>
-			<p>Where to next?</p>
+
 		</div>
 
+		<div class="screen" id="music-box-lock">
+			<button class="back" data-screen-id="suitcase-right"><img src="img/close.png"></button>
+			<div id="music-box-lock-1" class="scrollable music-box-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+			<div id="music-box-lock-2" class="scrollable music-box-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+			<div id="music-box-lock-3" class="scrollable music-box-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+		</div>
+		<div class="screen" id="music-box-opened">
+			<button class="back" data-screen-id="suitcase-right" data-stop-audio-id="musicbox"><img src="img/close.png"></button>
+			<img src="img/music-box-opened.png" alt="Music box opened">
+		</div>
+
+		<div class="screen" id="photo-book-lock">
+			<button class="back" data-screen-id="suitcase-right"><img src="img/close.png"></button>
+			<div id="photo-book-lock-1" class="scrollable photo-book-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+			<div id="photo-book-lock-2" class="scrollable photo-book-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+			<div id="photo-book-lock-3" class="scrollable photo-book-lock"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></img></div>
+		</div>
+		<div class="screen" id="photo-book-opened">
+			<button class="back" data-screen-id="suitcase-right"><img src="img/close.png"></button>
+			<div class="image">
+				<img src="img/photo-book-opened.png">
+				<button id="photo-right-button" data-screen-id="photo-right">Right half of photo</button>
+			</div>
+		</div>
+		<div class="screen" id="photo-right">
+			<button class="back" data-screen-id="photo-book-opened"><img src="img/close.png"></button>
+			<img src="img/photo-right.png" alt="Right photo">
+		</div>
+		<div class="screen" id="win-p2">
+			<h2>Win P2</h2>
+		</div>
 	</div>
 	<div id="debug">Sun Oct  1 00:28:59 2023</div>
 	<script type="text/javascript" src="main.js"></script>

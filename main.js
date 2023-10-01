@@ -1,3 +1,4 @@
+var cheat = false;
 var playerID;
 var playerCanvas;
 var currentScreen;
@@ -6,14 +7,22 @@ var isTouching = false;
 var audioPlayers = {
 	tick:new Audio("audio/tick.mp3"),
 	discovery:new Audio("audio/discovery.mp3"),
+	radio:new Audio("audio/radio.ogg"),
+	musicbox:new Audio("audio/musicbox.mp3"),
 };
 var audioLastPlayed = {}
-var suitcaseLockScrollIndex = {}
+var codeScrollIndex = {}
 var tickAudioPlayerIndex = 0;
 var tickAudioPlayers = [];
 var audioPlayersWarmed = false;
-var snowmanButtonClicks = 0;
 var socketURL = window.location.href.indexOf("localhost") == -1 ? "ws://46.246.44.156:6502" : "ws://localhost:6502";
+
+// state
+var musicBoxUnlocked = false;
+var compartmentUnlocked = false;
+var photoBookUnlocked = false;
+var radioPowered = false;
+
 
 const init = function() {
 	for (let i = 0; i < 15; i++) {
@@ -33,28 +42,17 @@ const init = function() {
 	document.addEventListener("mouseup", touchEnd);
 	document.addEventListener("touchcancel", touchCancel);
 	document.addEventListener("touchmove", touchMove);
-	document.addEventListener("scrollend", scrollEnd);
-	document.addEventListener("scroll", scroll);
 	document.addEventListener("click", touchClick);
 	document.addEventListener("keydown", keyDown);
 	document.addEventListener("keyup", keyUp);
+	document.addEventListener("animationiteration", evt => {});
+	document.addEventListener("animationend", evt => {});
+	document.addEventListener("transitionend", evt => {});
 
-	document.addEventListener("animationiteration", evt => {
-
-	});
-
-	document.addEventListener("animationend", evt => {
-
-	});
-
-	document.addEventListener("transitionend", evt => {
-		
-	});
-
-
-	id("suitcase-lock-1").addEventListener("scroll", suitcaseCodeScroll);
-	id("suitcase-lock-2").addEventListener("scroll", suitcaseCodeScroll);
-	id("suitcase-lock-3").addEventListener("scroll", suitcaseCodeScroll);
+	elms(".suitcase-lock").forEach(elm => elm.addEventListener("scroll", suitcaseCodeScroll));
+	elms(".music-box-lock").forEach(elm => elm.addEventListener("scroll", musicBoxCodeScroll));
+	elms(".suitcase-compartment-lock").forEach(elm => elm.addEventListener("scroll", suitcaseCompartmentCodeScroll));
+	elms(".photo-book-lock").forEach(elm => elm.addEventListener("scroll", photoBookCodeScroll));
 
 	openSocketConnection();
 	if(window.location.search.indexOf("?player=") != -1) {
@@ -73,6 +71,7 @@ const openSocketConnection = function() {
 }
 
 const sendSocketAction = function(actionID, args) {
+	console.log("SEND", actionID);
 	if (!socketConnection) return;
 	if (socketConnection.readyState == 0) {
 		socketConnection.onopen = function(evt) {
@@ -111,6 +110,11 @@ const tryPlayAudio = function(key, timeout) {
 	}
 }
 
+const stopAudio = function(key) {
+	audioPlayers[key].currentTime = 0;
+	audioPlayers[key].pause();
+}
+
 const warmUpAudioPlayers = function() {
 	audioPlayersWarmed = true;
 	tickAudioPlayers.forEach(player => {
@@ -134,9 +138,22 @@ const switchScreen = function(id) {
 	hideAll(".screen");
 	currentScreen = elm(`#${id}`);
 	show(currentScreen);
-
 	switch(currentScreen.id) {
-
+		case "music-box-lock":
+			if (musicBoxUnlocked) switchScreen("music-box-opened");
+			break;
+		case "photo-book-lock":
+			if (photoBookUnlocked) switchScreen("photo-book-opened");
+			break;
+		case "radio-unpowered":
+			if (radioPowered) switchScreen("radio-powered");
+			break;
+		case "radio-powered":
+			tryPlayAudio("radio");
+			break;
+		case "music-box-opened":
+			tryPlayAudio("musicbox");
+			break;
 	}
 }
 
@@ -145,12 +162,18 @@ const switchScreen = function(id) {
 const touchClick = function(evt) {
 	if (!audioPlayersWarmed) warmUpAudioPlayers();
 
+	let audioID = evt.target.dataset.stopAudioId;
+	if (audioID) {
+		stopAudio(audioID);
+	}
+	
 	let screenID = evt.target.dataset.screenId;
 	if (screenID) {
 		switchScreen(screenID)
 		tryPlayAudio("tick", 200);
 		return;
 	}
+
 
 	const id = evt.target.id;
 	switch(id) {
@@ -168,13 +191,10 @@ const touchClick = function(evt) {
 		case "start-p2": 
 			startGame(2);
 			break;
-		case "snowman-button": 
-			snowmanButtonClicks++;
-			if (snowmanButtonClicks > 5) {
-				sendSocketAction("solve-snowman", {playerID: playerID});
-				tryPlayAudio("discovery")
-				switchScreen("snow-land");
-			}
+		case "battery-button":
+			if (evt.target.classList.contains("passing")) return;
+			sendSocketAction("pass-battery", {playerID: playerID});
+			evt.target.classList.add("passing");
 			break;
 	}
 }
@@ -183,53 +203,69 @@ const socketResponse = function(evt) {
 	const data = JSON.parse(evt.data);
 	const action = data.action;
 	const args = data.args;
+	console.log("RECV",action);
 	switch(action) {
-		case "start-game":
-			if (args.playerID == 2) startGame(1);
-		break;
 		case "solve-suitcase":
-			if (args.playerID != playerID) tryPlayAudio("discovery");
+			if (args.playerID != playerID) {
+				tryPlayAudio("discovery");
+				switchScreen("suitcase-right");
+			}
 		break;
-		case "solve-snowman":
-			if (args.playerID != playerID) tryPlayAudio("discovery");
+		case "solve-suitcase-compartment":
+			if (args.playerID != playerID) {
+				tryPlayAudio("discovery");
+				switchScreen("win-p2");
+			}
 		break;
+		case "pass-battery":
+			if (args.playerID != playerID) {
+				if (currentScreen.id == "radio-unpowered") {
+					sendSocketAction("battery-accepted", {playerID: playerID});
+					radioPowered = true;
+					switchScreen("radio-powered");
+				} else {
+					sendSocketAction("battery-denied", {playerID: playerID});
+				}
+			}
+		break;
+		case "battery-accepted":
+			if (args.playerID != playerID) {
+				tryPlayAudio("discovery");
+				id("battery-button").remove();
+			}
+			break;
+		case "battery-denied":
+			if (args.playerID != playerID) {
+				id("battery-button").classList.remove("passing");
+			}
+			break;
 	}
 }
 
 const touchStart = function(evt) {
 	isTouching = true;
-	// console.log(evt, evt.target);
 }
 
 const touchEnd = function(evt) {
 	isTouching = false;
-	// console.log(evt, evt.target);
 }
 
 const touchCancel = function(evt) {
 	isTouching = false;
-	// console.log(evt, evt.target);
 }
 
 const touchMove = function(evt) {
-	// console.log(evt, evt.target);
 }
 
 const scroll = function(evt) {
-	console.log(evt, evt.target);
-}
-
-const scrollEnd = function(evt) {
-	console.log(evt, evt.target);
+	
 }
 
 const keyDown = function(evt) {
-	console.log(evt.key)
 	if (evt.key == "Shift") document.body.classList.add("debug")
 }
 
 const keyUp = function(evt) {
-	console.log(evt.key)
 	document.body.classList.remove("debug")
 }
 
@@ -248,27 +284,73 @@ const startGame = function(newPlayerID) {
 
 // Screen specific
 
-const suitcaseCodeScroll = function(evt) {
-	if (!suitcaseLockScrollIndex[evt.target.id]) suitcaseLockScrollIndex[evt.target.id] = 0;
+const manageCodeScroll = function(evt) {
+	if (!codeScrollIndex[evt.target.id]) codeScrollIndex[evt.target.id] = 0;
 	const idx = Math.floor(evt.target.scrollTop/evt.target.offsetHeight);
-	if (idx != suitcaseLockScrollIndex[evt.target.id]) {
-		suitcaseLockScrollIndex[evt.target.id] = idx;
+	if (idx != codeScrollIndex[evt.target.id]) {
+		codeScrollIndex[evt.target.id] = idx;
 		tryPlayTickAudio();
-	}
-	if (!isTouching) checkSuitcaseCode();
+	}	
 }
 
-const checkSuitcaseCode = function() {
+const suitcaseCodeScroll = function(evt) {
+	manageCodeScroll(evt);
+	if (isTouching) return;
 	if (currentScreen.id != "suitcase-lock") return;
 	const l1 = Math.floor(id("suitcase-lock-1").scrollTop/id("suitcase-lock-1").offsetHeight);
 	const l2 = Math.floor(id("suitcase-lock-2").scrollTop/id("suitcase-lock-2").offsetHeight);
 	const l3 = Math.floor(id("suitcase-lock-3").scrollTop/id("suitcase-lock-3").offsetHeight);
-	id("debug").innerText = `${l1} ${l2} ${l3}`;
-	if (l1 == 2 && l2 == 6 && l3 == 4) {
-		switchScreen("suitcase-inside");
+	id("debug").innerText = `suitcase-lock ${l1} ${l2} ${l3}`;
+	if (cheat || l1 == 2 && l2 == 6 && l3 == 4) {
+		switchScreen("suitcase-left");
 		tryPlayAudio("discovery")
 		sendSocketAction("solve-suitcase", {playerID: playerID});
 	}
 }
 
+const musicBoxCodeScroll = function(evt) {
+	manageCodeScroll(evt);
+	if (isTouching) return;
+	if (currentScreen.id != "music-box-lock") return;
+	const l1 = Math.floor(id("music-box-lock-1").scrollTop/id("music-box-lock-1").offsetHeight);
+	const l2 = Math.floor(id("music-box-lock-2").scrollTop/id("music-box-lock-2").offsetHeight);
+	const l3 = Math.floor(id("music-box-lock-3").scrollTop/id("music-box-lock-3").offsetHeight);
+	id("debug").innerText = `music-box-lock ${l1} ${l2} ${l3}`;
+	if (cheat || l1 == 2 && l2 == 6 && l3 == 4) {
+		musicBoxUnlocked = true;
+		switchScreen("music-box-opened");
+		tryPlayAudio("discovery");
+	}
+}
+
+const photoBookCodeScroll = function(evt) {
+	manageCodeScroll(evt);
+	if (isTouching) return;
+	if (currentScreen.id != "photo-book-lock") return;
+	const l1 = Math.floor(id("photo-book-lock-1").scrollTop/id("photo-book-lock-1").offsetHeight);
+	const l2 = Math.floor(id("photo-book-lock-2").scrollTop/id("photo-book-lock-2").offsetHeight);
+	const l3 = Math.floor(id("photo-book-lock-3").scrollTop/id("photo-book-lock-3").offsetHeight);
+	id("debug").innerText = `photo-book-lock ${l1} ${l2} ${l3}`;
+	if (cheat || l1 == 2 && l2 == 6 && l3 == 4) {
+		photoBookUnlocked = true;
+		switchScreen("photo-book-opened");
+		tryPlayAudio("discovery");
+	}
+}
+
+const suitcaseCompartmentCodeScroll = function(evt) {
+	manageCodeScroll(evt);
+	if (isTouching) return;
+	if (currentScreen.id != "suitcase-compartment-lock") return;
+	const l1 = Math.floor(id("suitcase-compartment-lock-1").scrollTop/id("suitcase-compartment-lock-1").offsetHeight);
+	const l2 = Math.floor(id("suitcase-compartment-lock-2").scrollTop/id("suitcase-compartment-lock-2").offsetHeight);
+	const l3 = Math.floor(id("suitcase-compartment-lock-3").scrollTop/id("suitcase-compartment-lock-3").offsetHeight);
+	id("debug").innerText = `suitcase-compartment-lock ${l1} ${l2} ${l3}`;
+	if (cheat || l1 == 2 && l2 == 6 && l3 == 4) {
+		compartmentUnlocked = true;
+		switchScreen("win-p1");
+		tryPlayAudio("discovery")
+		sendSocketAction("solve-suitcase-compartment", {playerID: playerID});
+	}
+}
 init();
