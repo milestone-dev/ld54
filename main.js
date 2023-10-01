@@ -1,4 +1,4 @@
-var cheat = false;
+var cheat = true;
 var playerID;
 var playerCanvas;
 var currentScreen;
@@ -319,7 +319,7 @@ const musicBoxCodeScroll = function(evt) {
 	const l2 = Math.floor(id("music-box-lock-2").scrollTop/id("music-box-lock-2").offsetHeight);
 	const l3 = Math.floor(id("music-box-lock-3").scrollTop/id("music-box-lock-3").offsetHeight);
 	id("debug").innerText = `music-box-lock ${l1} ${l2} ${l3}`;
-	if (cheat || l1 == 9 && l2 == 9 && l3 == 9) {
+	if (cheat || l1 == 1 && l2 == 0 && l3 == 5) {
 		musicBoxUnlocked = true;
 		switchScreen("music-box-opened");
 		tryPlayAudio("discovery");
@@ -349,7 +349,7 @@ const suitcaseCompartmentCodeScroll = function(evt) {
 	const l2 = Math.floor(id("suitcase-compartment-lock-2").scrollTop/id("suitcase-compartment-lock-2").offsetHeight);
 	const l3 = Math.floor(id("suitcase-compartment-lock-3").scrollTop/id("suitcase-compartment-lock-3").offsetHeight);
 	id("debug").innerText = `suitcase-compartment-lock ${l1} ${l2} ${l3}`;
-	if (cheat || l1 == 2 && l2 == 6 && l3 == 4) {
+	if (cheat || l1 == 6 && l2 == 5 && l3 == 4) {
 		compartmentUnlocked = true;
 		switchScreen("win-p1");
 		tryPlayAudio("discovery")

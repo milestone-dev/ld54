@@ -291,3 +291,11 @@ button img {
 	width:22%;
 	height: 14%;
 }
+
+#suitcase-left, #suitcase-right {
+	background: #926C50;
+}
+
+#suitcase-left img, #suitcase-right img {
+	height: 100vh;
+}
