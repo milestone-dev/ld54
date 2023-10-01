@@ -215,6 +215,8 @@ const socketResponse = function(evt) {
 		case "solve-suitcase-compartment":
 			if (args.playerID != playerID) {
 				tryPlayAudio("discovery");
+				stopAudio("radio");
+				stopAudio("musicbox");
 				switchScreen("win-p2");
 			}
 		break;
@@ -317,7 +319,7 @@ const musicBoxCodeScroll = function(evt) {
 	const l2 = Math.floor(id("music-box-lock-2").scrollTop/id("music-box-lock-2").offsetHeight);
 	const l3 = Math.floor(id("music-box-lock-3").scrollTop/id("music-box-lock-3").offsetHeight);
 	id("debug").innerText = `music-box-lock ${l1} ${l2} ${l3}`;
-	if (cheat || l1 == 2 && l2 == 6 && l3 == 4) {
+	if (cheat || l1 == 9 && l2 == 9 && l3 == 9) {
 		musicBoxUnlocked = true;
 		switchScreen("music-box-opened");
 		tryPlayAudio("discovery");
@@ -332,7 +334,7 @@ const photoBookCodeScroll = function(evt) {
 	const l2 = Math.floor(id("photo-book-lock-2").scrollTop/id("photo-book-lock-2").offsetHeight);
 	const l3 = Math.floor(id("photo-book-lock-3").scrollTop/id("photo-book-lock-3").offsetHeight);
 	id("debug").innerText = `photo-book-lock ${l1} ${l2} ${l3}`;
-	if (cheat || l1 == 2 && l2 == 6 && l3 == 4) {
+	if (cheat || l1 == 1 && l2 == 2 && l3 == 3) {
 		photoBookUnlocked = true;
 		switchScreen("photo-book-opened");
 		tryPlayAudio("discovery");
