@@ -134,10 +134,11 @@ const warmUpAudioPlayers = function() {
 
 }
 
-const switchScreen = function(id) {
+const switchScreen = function(screenID) {
 	hideAll(".screen");
-	currentScreen = elm(`#${id}`);
+	currentScreen = elm(`#${screenID}`);
 	show(currentScreen);
+	id("debug").innerText = currentScreen.id;
 	switch(currentScreen.id) {
 		case "music-box-lock":
 			if (musicBoxUnlocked) switchScreen("music-box-opened");
