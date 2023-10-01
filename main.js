@@ -36,6 +36,8 @@ const init = function() {
 	document.addEventListener("scrollend", scrollEnd);
 	document.addEventListener("scroll", scroll);
 	document.addEventListener("click", touchClick);
+	document.addEventListener("keydown", keyDown);
+	document.addEventListener("keyup", keyUp);
 
 	document.addEventListener("animationiteration", evt => {
 
@@ -221,13 +223,24 @@ const scrollEnd = function(evt) {
 	console.log(evt, evt.target);
 }
 
+const keyDown = function(evt) {
+	console.log(evt.key)
+	if (evt.key == "Shift") document.body.classList.add("debug")
+}
+
+const keyUp = function(evt) {
+	console.log(evt.key)
+	document.body.classList.remove("debug")
+}
+
+
 // Game loop
 
 const startGame = function(newPlayerID) {
 	playerID = newPlayerID;
 	playerCanvas = id(`p${playerID}`);
 	if (playerID == 1) switchScreen("suitcase");
-	else if (playerID == 2) switchScreen("weather-symbols");
+	else if (playerID == 2) switchScreen("qr-view");
 	show(playerCanvas);
 	hide(id("start"));
 	sendSocketAction("start-game", {playerID: playerID});
