@@ -1,4 +1,5 @@
 var cheat = true;
+var debugMode = true;
 var playerID;
 var playerCanvas;
 var currentScreen;
@@ -61,6 +62,9 @@ const init = function() {
 			startGame(parseInt(parts[1]));
 		}
 	}
+
+	if (!debugMode) hide(id("debug"))
+	if (!debugMode) id("start-p2").remove();
 };
 
 // Network
@@ -349,7 +353,7 @@ const suitcaseCompartmentCodeScroll = function(evt) {
 	const l2 = Math.floor(id("suitcase-compartment-lock-2").scrollTop/id("suitcase-compartment-lock-2").offsetHeight);
 	const l3 = Math.floor(id("suitcase-compartment-lock-3").scrollTop/id("suitcase-compartment-lock-3").offsetHeight);
 	id("debug").innerText = `suitcase-compartment-lock ${l1} ${l2} ${l3}`;
-	if (cheat || l1 == 6 && l2 == 5 && l3 == 4) {
+	if (cheat || l1 == 7 && l2 == 8 && l3 == 3) {
 		compartmentUnlocked = true;
 		switchScreen("win-p1");
 		tryPlayAudio("discovery")
